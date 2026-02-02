@@ -1,0 +1,9 @@
+{
+  "version": "1.0.0",
+  "build": 100,
+  "releaseDate": "2026-02-02",
+  "minimumOS": "14.0",
+  "downloadURL": "https://github.com/AAlcinesio/tokenkite/releases/download/v1.0.0/TokenKite.dmg",
+  "releaseNotes": "Initial public release",
+  "releaseNotesURL": "https://github.com/AAlcinesio/tokenkite/releases/tag/v1.0.0"
+}
