@@ -4,7 +4,7 @@ Track your AI spending across Claude Code, Cursor, and more — all from your Ma
 
 [![Download](https://img.shields.io/github/v/release/AAlcinesio/tokenkite?label=Download&style=flat-square)](https://github.com/AAlcinesio/tokenkite/releases/latest)
 [![macOS](https://img.shields.io/badge/macOS-14.0%2B-blue?style=flat-square)](https://github.com/AAlcinesio/tokenkite/releases/latest)
-[![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
+[![Website](https://img.shields.io/badge/Website-tokenkite.com-blue?style=flat-square)](https://tokenkite.com)
 
 ## Features
 
