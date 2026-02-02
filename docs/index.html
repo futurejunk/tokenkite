@@ -3,92 +3,817 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TokenKite - Track your AI spending</title>
-    <meta name="description" content="Track your AI spending across Claude Code, Cursor, and more — all from your Mac menu bar.">
-    <link rel="stylesheet" href="styles.css">
-    <link rel="icon" type="image/png" href="assets/logo.png">
+    <title>TokenKite — Track Claude & Cursor AI spending</title>
+    <meta name="description" content="A macOS menu bar app that tracks your Claude Code and Cursor AI usage. See your spending at a glance without leaving your workflow.">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="TokenKite — Track Claude & Cursor AI spending">
+    <meta property="og:description" content="A macOS menu bar app for developers who use Claude Code and Cursor.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://tokenkite.com">
+    <meta property="og:image" content="https://tokenkite.com/og-image.png">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="TokenKite — Track Claude & Cursor AI spending">
+    <meta name="twitter:description" content="A macOS menu bar app for developers who use Claude Code and Cursor.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪁</text></svg>">
+
+    <style>
+        :root {
+            --bg: #fafafa;
+            --bg-card: #ffffff;
+            --text: #111111;
+            --text-secondary: #555555;
+            --text-muted: #888888;
+            --accent: #0071e3;
+            --accent-hover: #0077ed;
+            --accent-subtle: #e8f4fd;
+            --border: #e0e0e0;
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+            --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.08);
+            --radius: 12px;
+            --radius-sm: 8px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #0a0a0a;
+                --bg-card: #141414;
+                --text: #f5f5f5;
+                --text-secondary: #a0a0a0;
+                --text-muted: #666666;
+                --accent: #4da6ff;
+                --accent-hover: #66b3ff;
+                --accent-subtle: #1a2a3a;
+                --border: #2a2a2a;
+                --shadow: 0 2px 8px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
+                --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.4), 0 4px 12px rgba(0, 0, 0, 0.3);
+            }
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Rajdhani', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(ellipse at center, var(--accent-subtle) 0%, transparent 70%);
+            opacity: 0.5;
+            z-index: -1;
+        }
+
+        .logo {
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1.25rem;
+            letter-spacing: -0.02em;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(135deg, var(--accent) 0%, #a855f7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 500px;
+            margin-bottom: 2.5rem;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.875rem 1.75rem;
+            border-radius: var(--radius);
+            font-size: 1rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent) 0%, #a855f7 100%);
+            color: white;
+            box-shadow: 0 4px 14px rgba(0, 113, 227, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--accent-hover) 0%, #b76ef8 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(168, 85, 247, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--bg-card);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .meta {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        .meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+        }
+
+        .badge {
+            background: var(--accent-subtle);
+            color: var(--accent);
+            padding: 0.25rem 0.625rem;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        /* Screenshot Section */
+        .screenshot-section {
+            padding: 0 2rem 6rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        .screenshot-wrapper {
+            position: relative;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .screenshot-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+        }
+
+        .window-controls {
+            display: flex;
+            gap: 8px;
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .window-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .window-dot.red { background: #ff5f57; }
+        .window-dot.yellow { background: #febc2e; }
+        .window-dot.green { background: #28c840; }
+
+        .screenshot-content {
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 300px;
+        }
+
+        .app-mockup {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            box-shadow: var(--shadow);
+            width: 280px;
+            overflow: hidden;
+        }
+
+        .mockup-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .mockup-header svg {
+            width: 18px;
+            height: 18px;
+            color: var(--text-muted);
+        }
+
+        .mockup-body {
+            padding: 16px;
+        }
+
+        .mockup-total {
+            text-align: center;
+            padding: 12px 0 16px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 12px;
+        }
+
+        .mockup-total .label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .mockup-total .amount {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .mockup-total .sub {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .mockup-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+        }
+
+        .mockup-row:not(:last-child) {
+            border-bottom: 1px solid var(--border);
+        }
+
+        .mockup-row .service {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .mockup-row .icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.75rem;
+            color: white;
+        }
+
+        .mockup-row .icon.anthropic { background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%); }
+        .mockup-row .icon.cursor { background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%); }
+
+        .mockup-row .name {
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .mockup-row .value {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .mockup-footer {
+            padding: 10px 16px;
+            border-top: 1px solid var(--border);
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-align: center;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 6rem 2rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-header h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .section-header p {
+            color: var(--text-secondary);
+            font-size: 1.125rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.75rem;
+            transition: all 0.2s ease;
+        }
+
+        .feature-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow);
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--accent-subtle);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.25rem;
+        }
+
+        .feature-icon svg {
+            width: 24px;
+            height: 24px;
+            color: var(--accent);
+        }
+
+        .feature-card h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* How It Works Section */
+        .how-it-works {
+            padding: 6rem 2rem;
+            background: var(--bg-card);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .how-it-works-content {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .step {
+            display: flex;
+            gap: 1.25rem;
+            margin-bottom: 2rem;
+        }
+
+        .step:last-child {
+            margin-bottom: 0;
+        }
+
+        .step-number {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--accent) 0%, #a855f7 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.875rem;
+            flex-shrink: 0;
+        }
+
+        .step-content h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .step-content p {
+            color: var(--text-secondary);
+        }
+
+        .step-content code {
+            background: var(--bg);
+            padding: 0.125rem 0.375rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+            color: var(--accent);
+        }
+
+        /* Privacy Section */
+        .privacy {
+            padding: 6rem 2rem;
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .privacy-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #dcfce7;
+            color: #166534;
+            padding: 0.5rem 1rem;
+            border-radius: 100px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .privacy-badge {
+                background: #14532d;
+                color: #86efac;
+            }
+        }
+
+        .privacy-badge svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .privacy h2 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .privacy p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 6rem 2rem;
+            text-align: center;
+        }
+
+        .cta-section h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .cta-section p {
+            color: var(--text-secondary);
+            font-size: 1.125rem;
+            margin-bottom: 2rem;
+        }
+
+        .support-links {
+            margin-top: 2rem;
+            font-size: 0.95rem;
+            color: var(--text-muted);
+        }
+
+        .support-links a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .support-links a:hover {
+            text-decoration: underline;
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 2rem;
+            border-top: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+
+        .footer-credit {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .hero {
+                min-height: auto;
+                padding: 4rem 1.5rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .cta-group {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .meta {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+
+            .screenshot-section {
+                padding: 0 1rem 4rem;
+            }
+
+            .app-mockup {
+                width: 100%;
+                max-width: 280px;
+            }
+
+            .features, .how-it-works, .privacy, .cta-section {
+                padding: 4rem 1.5rem;
+            }
+
+            .step {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <nav>
-            <div class="logo">
-                <img src="assets/logo.png" alt="TokenKite" width="32" height="32">
-                <span>TokenKite</span>
-            </div>
-            <div class="nav-links">
-                <a href="https://github.com/futurejunk/tokenkite">GitHub</a>
-                <a href="https://github.com/futurejunk/tokenkite/releases/latest" class="btn-download">Download</a>
-            </div>
-        </nav>
-    </header>
+    <!-- Hero -->
+    <section class="hero">
+        <div class="logo">TokenKite</div>
+        <h1>Track your <span>AI spending</span><br>at a glance</h1>
+        <p>A macOS menu bar app for developers who use Claude Code and Cursor. See your usage without leaving your workflow.</p>
 
-    <main>
-        <section class="hero">
-            <h1>Track your AI spending in one place</h1>
-            <p class="subtitle">Know exactly what Claude Code and Cursor cost you, right from your menu bar.</p>
-            <div class="cta">
-                <a href="https://github.com/futurejunk/tokenkite/releases/latest" class="btn-primary">Download for Mac</a>
-                <span class="meta">macOS 14+ &middot; Free</span>
-            </div>
-            <div class="screenshot">
-                <picture>
-                    <source srcset="assets/screenshot-dark.png" media="(prefers-color-scheme: dark)">
-                    <img src="assets/screenshot-light.png" alt="TokenKite screenshot" width="400">
-                </picture>
-            </div>
-        </section>
+        <div class="cta-group">
+            <a href="https://github.com/futurejunk/tokenkite/releases/latest/download/TokenKite.dmg" class="btn btn-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Download for Mac
+            </a>
+            <a href="https://github.com/futurejunk/tokenkite" class="btn btn-secondary">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                View on GitHub
+            </a>
+        </div>
 
-        <section class="features">
-            <div class="feature">
-                <div class="feature-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        <div class="meta">
+            <span>macOS 14+</span>
+            <span><span class="badge">Apple Notarized</span></span>
+            <span>Free</span>
+        </div>
+    </section>
+
+    <!-- Screenshot -->
+    <section class="screenshot-section">
+        <div class="screenshot-wrapper">
+            <div class="screenshot-container">
+                <div class="window-controls">
+                    <div class="window-dot red"></div>
+                    <div class="window-dot yellow"></div>
+                    <div class="window-dot green"></div>
                 </div>
-                <h3>Claude Code</h3>
-                <p>Auto-parse usage logs from your Claude Code sessions. See token counts and costs per model.</p>
-            </div>
-            <div class="feature">
-                <div class="feature-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                <div class="screenshot-content">
+                    <!-- App Mockup -->
+                    <div class="app-mockup">
+                        <div class="mockup-header">
+                            <span>TokenKite</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                        </div>
+                        <div class="mockup-body">
+                            <div class="mockup-total">
+                                <div class="label">This Month</div>
+                                <div class="amount">$142.50</div>
+                                <div class="sub">Covered by Max 5x plan</div>
+                            </div>
+                            <div class="mockup-row">
+                                <div class="service">
+                                    <div class="icon anthropic">A</div>
+                                    <span class="name">Anthropic</span>
+                                </div>
+                                <span class="value">$127.51</span>
+                            </div>
+                            <div class="mockup-row">
+                                <div class="service">
+                                    <div class="icon cursor">C</div>
+                                    <span class="name">Cursor</span>
+                                </div>
+                                <span class="value">$14.99</span>
+                            </div>
+                        </div>
+                        <div class="mockup-footer">
+                            Updated 2 minutes ago
+                        </div>
+                    </div>
                 </div>
-                <h3>Cursor</h3>
-                <p>Real-time billing data from Cursor's API. Matches your cursor.com dashboard exactly.</p>
             </div>
-            <div class="feature">
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features">
+        <div class="section-header">
+            <h2>Built for the Claude Code + Cursor workflow</h2>
+            <p>Track your AI usage from one place</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
                 <div class="feature-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
                 </div>
-                <h3>Quota Monitor</h3>
-                <p>See your Claude subscription quota at a glance. Know when you're approaching limits.</p>
+                <h3>Claude Code Tracking</h3>
+                <p>Parses your local JSONL logs with accurate pricing for all Claude models including caching discounts.</p>
             </div>
-        </section>
 
-        <section class="how-it-works">
-            <h2>How it works</h2>
-            <ol>
-                <li>
-                    <strong>Download and install</strong>
-                    <span>Drag to Applications, launch from menu bar</span>
-                </li>
-                <li>
-                    <strong>TokenKite reads your local data</strong>
-                    <span>Usage logs from Claude Code, billing from Cursor</span>
-                </li>
-                <li>
-                    <strong>See costs at a glance</strong>
-                    <span>Click the menu bar icon anytime</span>
-                </li>
-            </ol>
-            <p class="privacy-note">No account needed. No data leaves your Mac.</p>
-        </section>
-    </main>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                </div>
+                <h3>Cursor Integration</h3>
+                <p>Fetches usage data directly from Cursor's API. Matches your cursor.com dashboard exactly.</p>
+            </div>
 
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>
+                </div>
+                <h3>Quota Tracking</h3>
+                <p>Two modes: estimated (local, no permissions) or precise (OAuth API for exact quota status).</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                </div>
+                <h3>Minimal Permissions</h3>
+                <p>No Full Disk Access. No browser access. Just reads local files and Keychain (optional).</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works">
+        <div class="how-it-works-content">
+            <div class="section-header">
+                <h2>How it works</h2>
+                <p>TokenKite reads local data — nothing leaves your Mac</p>
+            </div>
+
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h3>Claude Code</h3>
+                    <p>Reads your usage logs from <code>~/.claude/projects/</code>. Calculates costs for all models with accurate pricing.</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h3>Cursor</h3>
+                    <p>Reads your auth token from Cursor's local SQLite database. Fetches usage from their API.</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h3>Menu Bar</h3>
+                    <p>See your total spending at a glance. Click for details. Updates automatically in the background.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Privacy -->
+    <section class="privacy">
+        <div class="privacy-badge">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Privacy-first
+        </div>
+        <h2>Your data stays on your Mac</h2>
+        <p>No cloud sync. No telemetry. No analytics. TokenKite processes everything locally and never phones home.</p>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+        <h2>Ready to track your AI spending?</h2>
+        <p>Download TokenKite for free.</p>
+
+        <div class="cta-group">
+            <a href="https://github.com/futurejunk/tokenkite/releases/latest/download/TokenKite.dmg" class="btn btn-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Download for Mac
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
     <footer>
-        <p>
+        <div class="footer-links">
             <a href="https://github.com/futurejunk/tokenkite">GitHub</a>
-            &middot;
-            <a href="https://github.com/futurejunk/tokenkite/issues">Report Issue</a>
-        </p>
-        <p class="copyright">Made for developers who care about their AI spend</p>
+            <a href="https://github.com/futurejunk/tokenkite/releases">Releases</a>
+            <a href="https://github.com/futurejunk/tokenkite/issues">Report an Issue</a>
+        </div>
+        <p class="footer-credit">Made for developers who care about their AI spend</p>
     </footer>
 </body>
 </html>
