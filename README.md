@@ -2,8 +2,8 @@
 
 Track your AI spending across Claude Code, Cursor, and more — all from your Mac menu bar.
 
-[![Download](https://img.shields.io/github/v/release/AAlcinesio/tokenkite?label=Download&style=flat-square)](https://github.com/AAlcinesio/tokenkite/releases/latest)
-[![macOS](https://img.shields.io/badge/macOS-14.0%2B-blue?style=flat-square)](https://github.com/AAlcinesio/tokenkite/releases/latest)
+[![Download](https://img.shields.io/github/v/release/futurejunk/tokenkite?label=Download&style=flat-square)](https://github.com/futurejunk/tokenkite/releases/latest)
+[![macOS](https://img.shields.io/badge/macOS-14.0%2B-blue?style=flat-square)](https://github.com/futurejunk/tokenkite/releases/latest)
 [![Website](https://img.shields.io/badge/Website-tokenkite.com-blue?style=flat-square)](https://tokenkite.com)
 
 ## Features
@@ -16,7 +16,7 @@ Track your AI spending across Claude Code, Cursor, and more — all from your Ma
 
 ## Installation
 
-1. Download the latest `.dmg` from [Releases](https://github.com/AAlcinesio/tokenkite/releases/latest)
+1. Download the latest `.dmg` from [Releases](https://github.com/futurejunk/tokenkite/releases/latest)
 2. Open the DMG and drag TokenKite to Applications
 3. Launch TokenKite from Applications
 4. Grant any requested permissions (for reading usage logs)
@@ -45,8 +45,8 @@ No API keys required for basic tracking. Your data never leaves your machine.
 
 ## Support
 
-- [Report a bug](https://github.com/AAlcinesio/tokenkite/issues/new?template=bug_report.md)
-- [Request a feature](https://github.com/AAlcinesio/tokenkite/issues/new?template=feature_request.md)
+- [Report a bug](https://github.com/futurejunk/tokenkite/issues/new?template=bug_report.md)
+- [Request a feature](https://github.com/futurejunk/tokenkite/issues/new?template=feature_request.md)
 
 ## License
 
