@@ -117,11 +117,13 @@
             letter-spacing: -0.02em;
         }
 
-        .hero h1 span {
+        .hero h1 span,
+        .gradient-text {
             background: linear-gradient(135deg, var(--accent) 0%, #a855f7 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            font-weight: 700;
         }
 
         .hero p {
@@ -207,7 +209,8 @@
 
         /* Screenshot Section */
         .screenshot-section {
-            padding: 0 2rem 6rem;
+            padding: 0 2rem 3rem;
+            margin-top: -3rem;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -705,6 +708,8 @@
             .meta {
                 flex-direction: column;
                 gap: 0.75rem;
+                align-items: center;
+                text-align: center;
             }
 
             .screenshot-section {
@@ -731,8 +736,8 @@
     <!-- Hero -->
     <section class="hero">
         <div class="logo">TokenKite</div>
-        <h1>Track your <span>AI spending</span><br>at a glance</h1>
-        <p>A macOS menu bar app for developers who use Claude Code and Cursor. See your usage without leaving your workflow.</p>
+        <h1>Track your <span>AI usage</span><br>at a glance</h1>
+        <p>Track Claude and Cursor usage from your menu bar.<br>Stay in your <span class="gradient-text">flow</span>.</p>
 
         <div class="cta-group">
             <a href="https://github.com/futurejunk/tokenkite/releases/latest/download/TokenKite.dmg" class="btn btn-primary">
@@ -781,7 +786,7 @@
             </div>
             <div class="screenshot-labels">
                 <button class="screenshot-label active" onclick="goToSlide(0)">Overview</button>
-                <button class="screenshot-label" onclick="goToSlide(1)">Claude (Plan)</button>
+                <button class="screenshot-label" onclick="goToSlide(1)">Claude</button>
                 <button class="screenshot-label" onclick="goToSlide(2)">Cursor</button>
                 <button class="screenshot-label" onclick="goToSlide(3)">Pay-as-you-go</button>
             </div>
