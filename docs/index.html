@@ -209,150 +209,140 @@
         .screenshot-section {
             padding: 0 2rem 6rem;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            align-items: center;
         }
 
         .screenshot-wrapper {
             position: relative;
-            max-width: 800px;
+            max-width: 550px;
             width: 100%;
         }
 
-        .screenshot-container {
+        .screenshot-carousel {
+            position: relative;
+            overflow: hidden;
+            border-radius: var(--radius);
+            aspect-ratio: 1 / 1;
+            background: transparent;
+        }
+
+        .screenshot-slides {
+            display: flex;
+            transition: transform 0.4s ease;
+            height: 100%;
+        }
+
+        .screenshot-slide {
+            min-width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+
+        .screenshot-slide img {
+            max-height: 100%;
+            width: auto;
+            max-width: 100%;
+            border-radius: var(--radius);
+            object-fit: contain;
+        }
+
+        .carousel-nav {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+        }
+
+        .carousel-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--border);
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            padding: 0;
+        }
+
+        .carousel-dot:hover {
+            background: var(--text-muted);
+        }
+
+        .carousel-dot.active {
+            background: var(--accent);
+            transform: scale(1.2);
+        }
+
+        .carousel-arrows {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            transform: translateY(-50%);
+            display: flex;
+            justify-content: space-between;
+            padding: 0 1rem;
+            pointer-events: none;
+        }
+
+        .carousel-arrow {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: var(--radius);
-            box-shadow: var(--shadow-lg);
-            overflow: hidden;
-        }
-
-        .window-controls {
-            display: flex;
-            gap: 8px;
-            padding: 12px 16px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .window-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-        }
-
-        .window-dot.red { background: #ff5f57; }
-        .window-dot.yellow { background: #febc2e; }
-        .window-dot.green { background: #28c840; }
-
-        .screenshot-content {
-            padding: 2rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 300px;
-        }
-
-        .app-mockup {
-            background: var(--bg);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-sm);
-            box-shadow: var(--shadow);
-            width: 280px;
-            overflow: hidden;
-        }
-
-        .mockup-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 16px;
-            border-bottom: 1px solid var(--border);
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
-
-        .mockup-header svg {
-            width: 18px;
-            height: 18px;
-            color: var(--text-muted);
-        }
-
-        .mockup-body {
-            padding: 16px;
-        }
-
-        .mockup-total {
-            text-align: center;
-            padding: 12px 0 16px;
-            border-bottom: 1px solid var(--border);
-            margin-bottom: 12px;
-        }
-
-        .mockup-total .label {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .mockup-total .amount {
-            font-size: 2rem;
-            font-weight: 700;
             color: var(--text);
-        }
-
-        .mockup-total .sub {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-        }
-
-        .mockup-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 0;
-        }
-
-        .mockup-row:not(:last-child) {
-            border-bottom: 1px solid var(--border);
-        }
-
-        .mockup-row .service {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .mockup-row .icon {
-            width: 28px;
-            height: 28px;
-            border-radius: 6px;
+            cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 600;
-            font-size: 0.75rem;
+            transition: all 0.2s ease;
+            pointer-events: auto;
+            box-shadow: var(--shadow);
+        }
+
+        .carousel-arrow:hover {
+            background: var(--accent);
             color: white;
+            border-color: var(--accent);
         }
 
-        .mockup-row .icon.anthropic { background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%); }
-        .mockup-row .icon.cursor { background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%); }
-
-        .mockup-row .name {
-            font-weight: 500;
-            font-size: 0.9rem;
+        .carousel-arrow svg {
+            width: 20px;
+            height: 20px;
         }
 
-        .mockup-row .value {
-            font-weight: 600;
-            font-size: 0.9rem;
+        .screenshot-labels {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
         }
 
-        .mockup-footer {
-            padding: 10px 16px;
-            border-top: 1px solid var(--border);
-            font-size: 0.75rem;
+        .screenshot-label {
+            font-size: 0.85rem;
             color: var(--text-muted);
-            text-align: center;
+            padding: 0.375rem 0.75rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .screenshot-label:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .screenshot-label.active {
+            background: var(--accent-subtle);
+            border-color: var(--accent);
+            color: var(--accent);
         }
 
         /* Features Section */
@@ -664,45 +654,35 @@
     <!-- Screenshot -->
     <section class="screenshot-section">
         <div class="screenshot-wrapper">
-            <div class="screenshot-container">
-                <div class="window-controls">
-                    <div class="window-dot red"></div>
-                    <div class="window-dot yellow"></div>
-                    <div class="window-dot green"></div>
-                </div>
-                <div class="screenshot-content">
-                    <!-- App Mockup -->
-                    <div class="app-mockup">
-                        <div class="mockup-header">
-                            <span>TokenKite</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-                        </div>
-                        <div class="mockup-body">
-                            <div class="mockup-total">
-                                <div class="label">This Month</div>
-                                <div class="amount">$142.50</div>
-                                <div class="sub">Covered by Max 5x plan</div>
-                            </div>
-                            <div class="mockup-row">
-                                <div class="service">
-                                    <div class="icon anthropic">A</div>
-                                    <span class="name">Anthropic</span>
-                                </div>
-                                <span class="value">$127.51</span>
-                            </div>
-                            <div class="mockup-row">
-                                <div class="service">
-                                    <div class="icon cursor">C</div>
-                                    <span class="name">Cursor</span>
-                                </div>
-                                <span class="value">$14.99</span>
-                            </div>
-                        </div>
-                        <div class="mockup-footer">
-                            Updated 2 minutes ago
-                        </div>
+            <div class="screenshot-carousel">
+                <div class="screenshot-slides" id="screenshotSlides">
+                    <div class="screenshot-slide">
+                        <img src="assets/1_main_page.png" alt="TokenKite main page showing monthly spend and API value at a glance">
+                    </div>
+                    <div class="screenshot-slide">
+                        <img src="assets/2_claude_dashboard_plan.png" alt="Claude dashboard with plan-specific usage limits">
+                    </div>
+                    <div class="screenshot-slide">
+                        <img src="assets/3_cursor_dashboard_plan.png" alt="Cursor dashboard with Auto and Premium model usage">
+                    </div>
+                    <div class="screenshot-slide">
+                        <img src="assets/4_claude_dashboard_no_plan.png" alt="Claude dashboard for pay-as-you-go API usage">
                     </div>
                 </div>
+                <div class="carousel-arrows">
+                    <button class="carousel-arrow" onclick="changeSlide(-1)" aria-label="Previous screenshot">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+                    </button>
+                    <button class="carousel-arrow" onclick="changeSlide(1)" aria-label="Next screenshot">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                    </button>
+                </div>
+            </div>
+            <div class="screenshot-labels">
+                <button class="screenshot-label active" onclick="goToSlide(0)">Overview</button>
+                <button class="screenshot-label" onclick="goToSlide(1)">Claude (Plan)</button>
+                <button class="screenshot-label" onclick="goToSlide(2)">Cursor</button>
+                <button class="screenshot-label" onclick="goToSlide(3)">Pay-as-you-go</button>
             </div>
         </div>
     </section>
@@ -815,5 +795,55 @@
         </div>
         <p class="footer-credit">Made for developers who care about their AI spend</p>
     </footer>
+
+    <script>
+        let currentSlide = 0;
+        const totalSlides = 4;
+
+        function updateCarousel() {
+            const slides = document.getElementById('screenshotSlides');
+            slides.style.transform = `translateX(-${currentSlide * 100}%)`;
+
+            // Update labels
+            document.querySelectorAll('.screenshot-label').forEach((label, index) => {
+                label.classList.toggle('active', index === currentSlide);
+            });
+        }
+
+        function changeSlide(direction) {
+            currentSlide = (currentSlide + direction + totalSlides) % totalSlides;
+            updateCarousel();
+        }
+
+        function goToSlide(index) {
+            currentSlide = index;
+            updateCarousel();
+        }
+
+        // Auto-advance carousel every 5 seconds
+        setInterval(() => {
+            changeSlide(1);
+        }, 5000);
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') changeSlide(-1);
+            if (e.key === 'ArrowRight') changeSlide(1);
+        });
+
+        // Touch/swipe support
+        let touchStartX = 0;
+        const carousel = document.querySelector('.screenshot-carousel');
+        carousel.addEventListener('touchstart', (e) => {
+            touchStartX = e.touches[0].clientX;
+        });
+        carousel.addEventListener('touchend', (e) => {
+            const touchEndX = e.changedTouches[0].clientX;
+            const diff = touchStartX - touchEndX;
+            if (Math.abs(diff) > 50) {
+                changeSlide(diff > 0 ? 1 : -1);
+            }
+        });
+    </script>
 </body>
 </html>
