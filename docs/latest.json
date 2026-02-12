@@ -1,0 +1,9 @@
+{
+  "version": "1.0.1",
+  "build": 101,
+  "releaseDate": "2026-02-12",
+  "minimumOS": "14.0",
+  "downloadURL": "https://github.com/futurejunk/tokenkite/releases/download/v1.0.1/TokenKite.dmg",
+  "releaseNotes": "Fixed quota estimation for Claude Opus 4.6",
+  "releaseNotesURL": "https://github.com/futurejunk/tokenkite/releases/tag/v1.0.1"
+}
